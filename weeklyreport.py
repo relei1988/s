@@ -15,7 +15,7 @@ def ks(a,b):
 		d="缩小"
 		return c,d
 	else:
-		c=0
+		c=""
 		d="持平"
 		return c,d	
 
@@ -29,10 +29,23 @@ def zj(a,b):
 		d="减少"
 		return d,c
 	else:
-		c=0
+		c=""
 		d="持平"
 		return d,c	
 
+def zd(a,b):
+	if a>b:
+		c=a-b
+		d="涨"
+		return d,c
+	elif b>a:
+		c=b-a
+		d="跌"
+		return d,c
+	else:
+		c=""
+		d="持平"
+		return d,c		
 
 def neipan():
 	
@@ -274,16 +287,93 @@ def kucun():
 	根据卓创统计，本周太仓日均提货量()（上周日均提货量）。
 	"""%(kc,a,b,jskc,c,d)
 
+def gongji():
+	table = data.sheet_by_name(u'卓创开工率')
+	for i in range(table.nrows):
+		v=table.cell(i,1)
+		a =str(v)
+		if "empty" in a:
+			break
+	rate=float(str(table.cell(i-1,1))[7:])*100
+	ratel=float(str(table.cell(i-2,1))[7:])*100
+	a,b=zj(rate,ratel)
+	print '''四、供给
+	国内：本周国内甲醇工厂开工负荷%s%%，%s%s%%。
+	'''%(rate,a,b)
+
+
+def xuqiu():
+	table = data.sheet_by_name(u'卓创开工率')
+	for i in range(table.nrows):
+		v=table.cell(i,1)
+		a =str(v)
+		if "empty" in a:
+			break
+	fuhe=float(str(table.cell(i-1,9))[7:])*100
+	fuhel=float(str(table.cell(i-2,9))[7:])*100
+	a,b=zj(fuhe,fuhel)
+	print '''五、需求
+	1、烯烃下游
+		本周国内mto/mtp装置负荷%s%%，%s%s%%。
+	'''%(fuhe,a,b)
+	table = data.sheet_by_name(u'甲醇与PP')
+	for i in range(table.nrows):
+		v=table.cell(i,3)
+		a =str(v)
+		if "empty" in a:
+			break
+	lirun = float(str(table.cell(i-1,3))[7:])
+	lirunl = float(str(table.cell(i-6,3))[7:])
+	lirun05 = float(str(table.cell(i-1,29))[7:])
+	lirun05l = float(str(table.cell(i-6,29))[7:])
+	lirun09 = float(str(table.cell(i-1,33))[7:])
+	lirun09l = float(str(table.cell(i-6,33))[7:])	
+
+	a,b=ks(lirun,lirunl)
+	c,d=ks(lirun05,lirun05l)
+	e,f=ks(lirun09,lirun09l)
+	print '''
+	本周甲醇制pp现货利润%s，利润%s%s。盘面5月利润%s，利润%s%s。盘面9月利润%s，利润%s%s。
+	'''%(lirun,b,a,lirun05,d,c,lirun09,f,e)
+
+	#传统下游
+	table = data.sheet_by_name(u'卓创开工率')
+	for i in range(table.nrows):
+		v=table.cell(i,3)
+		a =str(v)
+		if "empty" in a and i > 200:
+			break
+	jiaquanrate = float(str(table.cell(i-1,3))[7:])*100
+	jiaquanratel = float(str(table.cell(i-2,3))[7:])*100
+	cusuan = float(str(table.cell(i-1,6))[7:])*100
+	cusuanl =  float(str(table.cell(i-2,6))[7:])*100
+	ejm =  float(str(table.cell(i-1,4))[7:])*100
+	ejml = float(str(table.cell(i-2,4))[7:])*100
+	a,b=zj(jiaquanrate,jiaquanratel)
+	c,d = zj(cusuan,cusuanl)
+	e,f=zj(ejm,ejml)
+	print """2、传统下游
+	甲醛开工负荷%s%%，%s%s%%，
+	醋酸开工负荷%s%%，%s%s%%，
+	二甲醚开工负荷%s%%，%s%s%%，
+	"""%(jiaquanrate,a,b,cusuan,c,d,ejm,e,f)
+
+
 def main():
-	'''
+
 	neipan()
 	
 
 	waipan()
 	
 	shui()
-	'''
+
 	kucun()
+
+	gongji()
+
+	xuqiu()
+
 
 
 if __name__ =="__main__":
