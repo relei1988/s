@@ -150,9 +150,9 @@ def waipan():
 	'''
 	table = data.sheet_by_name(u'国际价格')	
 	for i in range(table.nrows):
-		v = table.cell(i,0)
+		v = table.cell(i,1)
 		a = str(v)
-		if "xl"  not in a and i >150:
+		if "nu"  not in a and i >150:
 			break
 		#此处i为最后一行数据
 		crf = str(table.cell(i,3))[7:]
@@ -277,13 +277,13 @@ def kucun():
 	kc=float(str(table.cell(i,5))[7:])
 	kcl=float(str(table.cell(i-1,5))[7:])
 	a,b=zj(kc,kcl)
-	jskc=float(str(table.cell(i,8))[7:])
-	jskcl=float(str(table.cell(i-1,8))[7:])
+	jskc=float(str(table.cell(i,1))[7:])
+	jskcl=float(str(table.cell(i-1,1))[7:])
 	c,d=zj(jskc,jskcl)
 
 
 	print """三、库存
-	本周甲醇港口库存%s万吨，%s%s万吨。本周江苏库存%s万吨，%s%s万吨。
+	本周甲醇港口库存%s万吨，%s%s万吨。其中江苏库存%s万吨，%s%s万吨。
 	根据卓创统计，本周太仓日均提货量()（上周日均提货量）。
 	"""%(kc,a,b,jskc,c,d)
 
