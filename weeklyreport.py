@@ -3,6 +3,7 @@ import  xdrlib ,sys
 import xlrd
 import docx
 import re
+import time
 data = xlrd.open_workbook('SS.xlsx')
 
 def ks(a,b):
@@ -114,9 +115,10 @@ def neipan():
 
 
 	c1 = """周报:
-	1、现货价格及成交情况:
-	截至本周五，太仓现货收至%s，%s%s。华南%s，%s%s。
-	西北南线%s，北线%s，河北石家庄%s，%s%s。鲁南%s,%s%s。
+	一、现货价格及成交情况:
+	1内盘
+	截至本周五，太仓现货收至%s，%s%s，成交。华南%s，%s%s，成交。
+	西北南线%s，北线%s，河北石家庄%s，%s%s，成交。鲁南%s,%s%s，成交。
 
 	"""%(taicang,flag,c,huanan,flag0,d,eeds,eeds,hebei,flag1,e,lunan,flag2,f)
 	print c1
@@ -213,16 +215,16 @@ def shui():
 		a =str(v)
 		if "empty" in a and i >700:
 			break
-	#i-1是最后一个交易		
+	#i是最后一个交易		
 	ma05= str(table.cell(i,16))
 	ma05l=str(table.cell(i-5,16))
-	ima05=float(re.findall(r"\d*",ma05)[7])
-	ima05l = float(re.findall(r"\d*",ma05l)[7])
+	ima05 = float(str(ma05)[7:])
+	ima05l =  float(str(ma05l)[7:])
 	pct=(ima05-ima05l)/ima05l*100
 	ma09=str(table.cell(i,17))
 	ma09l=str(table.cell(i-5,17))
-	ima09=float(re.findall(r"\d*",ma09)[7])
-	ima09l=float(re.findall(r"\d*",ma09l)[7])
+	ima09=float(str(ma09)[7:])
+	ima09l=float(str(ma09l)[7:])
 	pct09=(ima09-ima09l)/ima09l*100
 	a=ima05-ima05l
 	b=ima09-ima09l
@@ -238,14 +240,17 @@ def shui():
 		b=abs(b)
 	shui=str(table.cell(i,21))
 
-	ishui=int(re.findall(r"\d*",shui)[7])
+	ishui=float(str(shui)[7:])
+	shuil=str(table.cell(i-5,21))
+	ishuil=float(str(shuil)[7:])
+	
+	c=ishui-ishuil
 	if ishui >0:
 		flag3="升水"
 	else:
 		flag3="贴水"
-	shuil=str(table.cell(i-5,21))
-	ishuil=int(re.findall(r"\d*",shuil)[7])
-	c=ishui-ishuil
+		ishui=0-ishui
+
 	if c>0:
 		flag4="扩大"
 	else:
@@ -260,10 +265,28 @@ def shui():
 		flag5="缩小"
 		d=abs(d)
 
+	xian=float(str(table.cell(i,1))[7:])
+	xianl=float(str(table.cell(i-5,1))[7:])
+	gapto09=xian-ima09
+	gapto09l=xianl-ima09l
+	e = gapto09-gapto09l
+	if gapto09 >0 :
+		flag6="升水"
+	else:
+		flag6="贴水"
+		gapto09=0-gapto09
+
+	if e>0:
+		flag7="扩大"
+	else:
+		flag7="缩小"
+		e=abs(e)
+
+
 	print """二、盘面升贴水
 	截至本周五，ma05收至%s，%s%s点（%s %%），ma09收至%s，%s%s点(%s %%)
-	甲醇现货对MA05%s%s，%s%s。MA05-MA09价差%s，%s%s
-	"""%(ima05,flag1,a,pct,ima09,flag2,b,pct09,flag3,ishui,flag4,c,gap,flag5,d)
+	甲醇现货对MA05%s%s，%s%s。MA05-MA09价差%s，%s%s。现货对MA09%s%s，%s%s。
+	"""%(ima05,flag1,a,pct,ima09,flag2,b,pct09,flag3,ishui,flag4,c,gap,flag5,d,flag6,gapto09,flag7,e)
 
 
 def kucun():
@@ -284,7 +307,7 @@ def kucun():
 
 	print """三、库存
 	本周甲醇港口库存%s万吨，%s%s万吨。其中江苏库存%s万吨，%s%s万吨。
-	根据卓创统计，本周太仓日均提货量()（上周日均提货量）。
+	根据卓创统计，本周太仓日均提货量吨（上周吨）。
 	"""%(kc,a,b,jskc,c,d)
 
 def gongji():
@@ -373,6 +396,7 @@ def main():
 	gongji()
 
 	xuqiu()
+	#time.sleep(9999)
 
 
 
