@@ -57,9 +57,9 @@ def neipan():
 	name_list.extend(table.row_values(1))//添加到数组中
 	'''
 	for i in range(table.nrows):
-		v = table.cell(i,0)
+		v = table.cell(i,1)
 		a = str(v)
-		if "xl"  not in a and i >10:
+		if "num"  not in a and i >560:
 			break	
 	#得到i-1是最后一行有效数据
 	lastline=i-1
@@ -211,22 +211,22 @@ def doc_ctrl():
 def shui():
 	table = data.sheet_by_name(u'每日报价')
 	for i in range(table.nrows):
-		v=table.cell(i,16)
+		v=table.cell(i,17)
 		a =str(v)
 		if "empty" in a and i >700:
 			break
-	#i是最后一个交易		
-	ma05= str(table.cell(i,16))
-	ma05l=str(table.cell(i-5,16))
-	ima05 = float(str(ma05)[7:])
-	ima05l =  float(str(ma05l)[7:])
-	pct=(ima05-ima05l)/ima05l*100
-	ma09=str(table.cell(i,17))
-	ma09l=str(table.cell(i-5,17))
+	#i是最后一个交易
+	ma01= str(table.cell(i,17))
+	ma01l=str(table.cell(i-5,17))
+	ima01 = float(str(ma01)[7:])
+	ima01l =  float(str(ma01l)[7:])
+	pct=(ima01-ima01l)/ima01l*100
+	ma09=str(table.cell(i,20))
+	ma09l=str(table.cell(i-5,20))
 	ima09=float(str(ma09)[7:])
 	ima09l=float(str(ma09l)[7:])
 	pct09=(ima09-ima09l)/ima09l*100
-	a=ima05-ima05l
+	a=ima01-ima01l
 	b=ima09-ima09l
 	if a>0:
 		flag1="涨"
@@ -238,10 +238,10 @@ def shui():
 	else:
 		flag2="跌"
 		b=abs(b)
-	shui=str(table.cell(i,21))
+	shui=str(table.cell(i,24))
 
 	ishui=float(str(shui)[7:])
-	shuil=str(table.cell(i-5,21))
+	shuil=str(table.cell(i-5,24))
 	ishuil=float(str(shuil)[7:])
 	
 	c=ishui-ishuil
@@ -256,8 +256,8 @@ def shui():
 	else:
 		flag4="缩小"
 		c=abs(c)	
-	gap=int(ima05-ima09)
-	gapl=int(ima05l-ima09l)
+	gap=int(ima01-ima09)
+	gapl=int(ima01l-ima09l)
 	d = gap-gapl
 	if d>0:
 		flag5="扩大"
@@ -284,9 +284,9 @@ def shui():
 
 
 	print """二、盘面升贴水
-	截至本周五，ma05收至%s，%s%s点（%s %%），ma09收至%s，%s%s点(%s %%)
-	甲醇现货对MA05%s%s，%s%s。MA05-MA09价差%s，%s%s。现货对MA09%s%s，%s%s。
-	"""%(ima05,flag1,a,pct,ima09,flag2,b,pct09,flag3,ishui,flag4,c,gap,flag5,d,flag6,gapto09,flag7,e)
+	截至本周五，ma1709收至%s，%s%s点（%s %%），ma1801收至%s，%s%s点(%s %%)
+	甲醇现货对MA1709%s%s，%s%s。MA09-MA01价差%s，%s%s。
+	"""%(ima01,flag1,a,pct,ima09,flag2,b,pct09,flag3,ishui,flag4,c,gap,flag5,d)
 
 
 def kucun():
@@ -343,20 +343,20 @@ def xuqiu():
 	for i in range(table.nrows):
 		v=table.cell(i,3)
 		a =str(v)
-		if "empty" in a:
-			break
-	lirun = float(str(table.cell(i-1,3))[7:])
-	lirunl = float(str(table.cell(i-6,3))[7:])
-	lirun05 = float(str(table.cell(i-1,29))[7:])
-	lirun05l = float(str(table.cell(i-6,29))[7:])
-	lirun09 = float(str(table.cell(i-1,33))[7:])
-	lirun09l = float(str(table.cell(i-6,33))[7:])	
+		if "empty" in a and i >200:
+			break	
+	lirun = float(str(table.cell(i,3))[7:])
+	lirunl = float(str(table.cell(i-5,3))[7:])
+	lirun05 = float(str(table.cell(i,31))[7:])
+	lirun05l = float(str(table.cell(i-5,31))[7:])
+	lirun09 = float(str(table.cell(i,35))[7:])
+	lirun09l = float(str(table.cell(i-5,35))[7:])	
 
 	a,b=ks(lirun,lirunl)
 	c,d=ks(lirun05,lirun05l)
 	e,f=ks(lirun09,lirun09l)
 	print '''
-	本周甲醇制pp现货利润%s，利润%s%s。盘面5月利润%s，利润%s%s。盘面9月利润%s，利润%s%s。
+	本周甲醇制pp现货利润%s，利润%s%s。盘面9月利润%s，利润%s%s。盘面1月利润%s，利润%s%s。
 	'''%(lirun,b,a,lirun05,d,c,lirun09,f,e)
 
 	#传统下游
