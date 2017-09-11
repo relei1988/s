@@ -332,8 +332,8 @@ def xuqiu():
 		a =str(v)
 		if "empty" in a:
 			break
-	fuhe=float(str(table.cell(i-1,9))[7:])*100
-	fuhel=float(str(table.cell(i-2,9))[7:])*100
+	fuhe=float(str(table.cell(i,9))[7:])*100
+	fuhel=float(str(table.cell(i-1,9))[7:])*100
 	a,b=zj(fuhe,fuhel)
 	print '''五、需求
 	1、烯烃下游
@@ -344,7 +344,7 @@ def xuqiu():
 		v=table.cell(i,3)
 		a =str(v)
 		if "empty" in a and i >200:
-			break	
+			break		
 	lirun = float(str(table.cell(i,3))[7:])
 	lirunl = float(str(table.cell(i-5,3))[7:])
 	lirun05 = float(str(table.cell(i,31))[7:])
@@ -366,6 +366,7 @@ def xuqiu():
 		a =str(v)
 		if "empty" in a and i > 200:
 			break
+	i+=1
 	jiaquanrate = float(str(table.cell(i-1,3))[7:])*100
 	jiaquanratel = float(str(table.cell(i-2,3))[7:])*100
 	cusuan = float(str(table.cell(i-1,6))[7:])*100
